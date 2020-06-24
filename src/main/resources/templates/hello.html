@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Hello Thymeleaf</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <!--通过<script>标签引入ECharts的组件JS-->
+        <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts.min.js"></script>
+
+    </head>
+    <body>
+        <h3 th:text="${hello}">Hello Thymeleaf</h3>
+        <span th:text="${#calendars.format(today,'yyyy-MM-dd')}">2016-08-18</span>
+        <div id="myChar" style="width: 1000px; height: 500px;"></div>
+    </body>
+    <script type="text/javascript">
+        // 初始化ECharts组件到id为main的元素上
+        let myChart = echarts.init(document.getElementById('myChar'));
+        // 定义图标的配置项
+        let option = {
+            title: {
+                text: 'Spring Boot中使用ECharts'
+            },
+            tooltip: {},
+            // x轴配置
+            xAxis: {
+                type: "category",
+                boundaryGap: false,
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            // y轴配置
+            yAxis: {
+                type: "value",
+            },
+            series: [{
+                // 数据集（也可以从后端的Controller中传入）
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                // 图表类型，这里使用line，为折线图
+                type: 'line'
+            }]
+        };
+        myChart.setOption(option);
+    </script>
+</html>

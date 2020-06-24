@@ -1,0 +1,71 @@
+错误一：Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+       原因：添加了 Mybatis 依赖
+       解决：在 application.properties 中配置 数据库 driver、url、name、password
+            # mysql 8.0 JDBC 连接参数
+            spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+            spring.datasource.url=jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useAffectedRows=true
+            spring.datasource.data-username=root
+            spring.datasource.data-password=root
+
+错误二：配置 swagger2 时，Unable to infer base url.
+       原因：未扫描到 swagger 配置信息
+       解决：1)、创建了 swagger 配置类：详见 com.spring.boot.swagger.SwaggerApp
+            2)、在配置文件 application.properties 中配置 swagger 信息：
+                   swagger.title：标题
+                   swagger.description：描述
+                   swagger.version：版本
+                   swagger.license：许可证
+                   swagger.licenseUrl：许可证URL
+                   swagger.termsOfServiceUrl：服务条款URL
+                   swagger.contact.name：维护人
+                   swagger.contact.url：维护人URL
+                   swagger.contact.email：维护人email
+                   swagger.base-package：swagger扫描的基础包，默认：全扫描
+                   swagger.base-path：需要处理的基础URL规则，默认：/**
+                然后应用主类中添加 @EnableSwagger2Doc 注解
+
+错误三：在错误二中，选择方式二解决，会产生：java.lang.NoClassDefFoundError: javax/validation/constraints/Min
+       原因：缺少 javax.validation 依赖
+       解决：在 pom.xml 中添加依赖：
+           <dependency>
+               <groupId>javax.validation</groupId>
+               <artifactId>validation-api</artifactId>
+               <version>2.0.1.Final</version>
+           </dependency>
+
+错误四：nested exception is java.sql.SQLException: Access denied for user ''@'localhost' (using password: NO)
+       原因：配置文件 application.properties 中 用户名 与 密码 配置错误
+
+错误五：class path resource [classpath*:mapper/*.xml] cannot be opened because it does not exist
+      原因：映射器文件中有问题，要么 namespace 未对应，要么 id 未对应，要么 参数（parameterType）有问题
+      注：todo Mybatis/Ibatis框架不支持Java中的 char 基本数据类型，
+         Java中的 String类型可以通过 Mybatis/Ibatis框架，进行兼容数据库中的 CHAR、VARCHAR 这2种数据类型
+
+错误六：在测试中，如果使用 new 创建控制器类，那么控制器类中的 @Autowired 将实现，获取的注入的值为空
+      解决：在使用 MockMvc 测试时，创建默认的 DefaultMockMvcBuilder，
+           @Autowired
+           private WebApplicationContext context;
+           @Before
+           public void setMvc(){
+               mvc = MockMvcBuilders.webAppContextSetup(context).build();
+           }
+
+错误七：配置多数据源时：jdbcUrl is required with driverClassName
+      原因：在配置文件 application.properties 中使用了 spring.datasource.url
+      解决：在配置文件 application.properties 中使用 spring.datasource.jdbc-url
+           如：# 多数据源配置
+             # test database  默认数据库源
+             spring.datasource.test.driver-class-name=com.mysql.cj.jdbc.Driver
+             spring.datasource.test.jdbc-url=jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useAffectedRows=true
+             spring.datasource.test.username=root
+             spring.datasource.test.password=root
+             # goods database
+             spring.datasource.goods.driver-class-name=com.mysql.cj.jdbc.Driver
+             spring.datasource.goods.jdbc-url=jdbc:mysql://localhost:3306/goods?useSSL=false&serverTimezone=UTC&useAffectedRows=true
+             spring.datasource.goods.username=root
+             spring.datasource.goods.password=root
+
+
+
+
+

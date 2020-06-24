@@ -1,0 +1,49 @@
+SpringBoot 使用 Mybatis
+1、Maven 依赖：
+   <!--mybatis-->
+   <dependency>
+       <groupId>org.mybatis.spring.boot</groupId>
+       <artifactId>mybatis-spring-boot-starter</artifactId>
+       <version>2.1.3</version>
+   </dependency>
+
+   <!--mysql 数据库连接-->
+   <dependency>
+       <groupId>mysql</groupId>
+       <artifactId>mysql-connector-java</artifactId>
+       <scope>runtime</scope>
+   </dependency>
+2、在 application.properties 配置文件中配置数据库连接参数
+   # 数据源配置
+   # mysql 8.0 JDBC 连接参数
+   spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+   spring.datasource.url=jdbc:mysql://localhost:3306/test?useSSL=false&serverTimezone=UTC&useAffectedRows=true
+   spring.datasource.username=root
+   spring.datasource.password=root
+3、在应用主类中增加 mapper 的扫描包配置：
+   如：@MapperScan("com.spring.boot.dao")
+   配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中
+   todo : 要求：映射器文件 namespace 与 Dao接口 全名一致：包名+类名
+               映射器文件中 aql 语句的 id 与 Dao接口中方法名一致
+   在 Dao接口 中添加 @Repository 注解
+   如：@Repository
+      public interface UserDao {}
+ 4、在 application.properties 配置文件中配置 Mybatis 映射器文件路径
+   #配置 Mybatis 映射器文件路径
+   mybatis.mapper-locations=classpath:mapper/*.xml
+   #扫描entity包 使用别名
+   mybatis.type-aliases-package=com.spring.boot.entity
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.dao.UserDao">
+
+    <!-- 为dao接口方法提供sql语句配置 -->
+    <!--映射器文件 namespace 与 Dao接口 全名一致：包名+类名
+        映射器文件中 aql 语句的 id 与 Dao接口中方法名一致-->
+
+    <select id="getUserByUid" resultType="User" parameterType="long">
+        SELECT * FROM user WHERE uid = #{uid}
+    </select>
+
+    <!--获取指定用户数，分页查询-->
+    <select id="getUsers" resultType="User">
+        SELECT * FROM user ORDER BY uid LIMIT #{offset, javaType=int}, #{limit, javaType=int}
+    </select>
+
+    <insert id="insertUser" parameterType="User" keyProperty="uid" useGeneratedKeys="true">
+        INSERT ignore INTO user(name, age, email)
+        VALUES (#{user.name}, #{user.age}, #{user.email})
+    </insert>
+
+    <update id="updateUserByUid" parameterType="long">
+        UPDATE user
+        <set>
+            <if test="user.name != null">name = #{user.name}</if>
+            <if test="user.age != null">name = #{user.age}</if>
+            <if test="user.email != null">name = #{user.email}</if>
+        </set>
+        WHERE uid = #{uid}
+    </update>
+
+    <!--根据 uid 删除数据-->
+    <delete id="deleteUserByUid" parameterType="long">
+        DELETE FROM user WHERE uid = #{uid}
+    </delete>
+
+</mapper>

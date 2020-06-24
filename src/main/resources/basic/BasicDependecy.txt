@@ -1,0 +1,110 @@
+依赖：
+Lombok ：为注解的类自动生成 get、set、toString、equals和hashCode方法
+@Data: 自动为所有字段添加@ToString, @EqualsAndHashCode, @Getter方法，为非final字段添加@Setter,和@RequiredArgsConstructor
+maven 依赖：
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.12</version>
+    </dependency>
+IntelliJ IDEA 安装 Lombok Plugin
+
+
+生成本地接口文档：Swagger2
+配置要求：
+    1、Maven 依赖：
+       <dependency>
+           <groupId>com.spring4all</groupId>
+           <artifactId>swagger-spring-boot-starter</artifactId>
+           <version>1.9.0.RELEASE</version>
+       </dependency>
+    2、在应用主类上添加注解：@EnableSwagger2Doc  // 使能 swagger 配置
+    配置方式：
+       一：创建配置类，详见 com.spring.boot.swagger.SwaggerApp
+       二：1）、配置 application.properties 文件配置：
+               swagger.title：标题
+               swagger.description：描述
+               swagger.version：版本
+               swagger.license：许可证
+               swagger.licenseUrl：许可证URL
+               swagger.termsOfServiceUrl：服务条款URL
+               swagger.contact.name：维护人
+               swagger.contact.url：维护人URL
+               swagger.contact.email：维护人email
+               swagger.base-package：swagger扫描的基础包，默认：全扫描
+               swagger.base-path：需要处理的基础URL规则，默认：/**
+          2）、应用主类中添加 @EnableSwagger2Doc 注解
+相关注解:
+    1、实体类相关注解：
+      @ApiModel：设置接口相关实体的描述
+      @ApiModelProperty: 设置实体类成员属性的相关描述
+    2、控制类相关注解
+      @Api：设置对控制器的描述，如：@Api(tags = "用户管理")
+      @ApiOperation：设置对控制类中方法（即接口）的描述，
+            如：@ApiOperation(value = "获取用户列表", httpMethod = "GET", response = java.util.List.class)
+      @ApiIgnore: Swagger 文档不会显示拥有该注解的接口
+      @ApiImplicitParams: 用于描述接口的非对象参数集，有多个参数时
+      @ApiImplicitParam: 用于描述接口的非对象参数，一般与 @ApiImplicitParams 组合使用
+            如：@ApiImplicitParam(name = "id", value = "用户id", paramType = "path", dataType = "Long", required = true)
+接口的分组：
+    如：1）、有 @Api(tags = {"学生管理", "教学管理"}) @Api(tags = {"教师管理", "教学管理"})
+            则 "教学管理" 中包含 "学生管理" 与 "教师管理" 中所有的接口
+       2）、有 @Api(tags = {"学生管理"})  @ApiOperation(value = "获取学生列表", httpMethod = "GET", tags = "教学管理")
+            则 "教学管理" 中包含 "教师管理" 中所有的接口，包含 "学生管理" 中  "获取学生列表" 该单个接口
+参数的分组：通过 @ApiModelProperty 注解的position参数来实现位置的设置
+    如：@ApiModelProperty(value = "用户id", required = true, position = 1)
+        @ApiModelProperty(value = "用户名", required = true, position = 2)
+
+
+校验：JSR-303（Java Specification Requests - 303），Java 规范提案
+配置要求：Maven 依赖：
+    <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>2.0.1.Final</version>
+    </dependency>
+    或者：
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>5.4.1.Final</version>
+    </dependency>
+Bean Validation 内置约束 Constraint：
+    @Null                          被注释的元素必须为 null
+    @NotNull                       被注释的元素必须不为 null
+    @AssertTrue                    被注释的元素必须为 true
+    @AssertFalse                   被注释的元素必须为 false
+    @Min(value)                    被注释的元素必须是一个数字，其值必须大于等于指定的最小值
+    @Max(value)                    被注释的元素必须是一个数字，其值必须小于等于指定的最大值
+    @DecimalMin(value)             被注释的元素必须是一个数字，其值必须大于等于指定的最小值
+    @DecimalMax(value)             被注释的元素必须是一个数字，其值必须小于等于指定的最大值
+    @Size(max=, min=)              被注释的元素的大小必须在指定的范围内
+    @Digits (integer, fraction)    被注释的元素必须是一个数字，其值必须在可接受的范围内
+    @Past                          被注释的元素必须是一个过去的日期
+    @Future                        被注释的元素必须是一个将来的日期
+    @Pattern(regex=,flag=)         被注释的元素必须符合指定的正则表达式
+Hibernate Validator 附加约束 Constraint：
+    @NotBlank(message =)           验证字符串非null，且长度必须大于0
+    @Email                         被注释的元素必须是电子邮箱地址
+    @Length(min=,max=)             被注释的字符串的大小必须在指定的范围内
+    @NotEmpty                      被注释的字符串的必须非空
+    @Range(min=,max=,message=)     被注释的元素必须在合适的范围内
+todo 注意：使用时，在指定校验的实体类对象前加 @Valid，一般用在控制类中的方法（即接口）的参数上
+
+
+
+AOP ：切面
+Maven 依赖：
+  <!--引入AOP依赖,默认增加 @EnableAspectJAutoProxy，todo 无需在应用主类上添加注解：@EnableAspectJAutoProxy-->
+  <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+  </dependency>
+使用时，在切面（关注点模块化）类上添加注解
+  如：@Aspect  // 使之成为切面类
+     @Component // 把切面类加入到IOC容器中
+     public class DataSourceAop { ... }
+
+
+
+

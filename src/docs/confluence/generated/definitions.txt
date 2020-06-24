@@ -1,0 +1,15 @@
+
+h2. Definitions {anchor:definitions}
+
+h3. User {anchor:user}
+用户实体类
+
+
+||Name||Description||Schema||
+|*age*\\ \\ _optional_||用户年龄\\ \\ *Minimum value* : {noformat}18{noformat}\\ \\ *Maximum value* : {noformat}99{noformat}||integer (int32)|
+|*email*\\ \\ _optional_||用户邮箱||string|
+|*name*\\ \\ _required_||用户名\\ \\ *Length* : {noformat}2 - 5{noformat}||string|
+|*uid*\\ \\ _required_||用户id||integer (int64)|
+
+
+

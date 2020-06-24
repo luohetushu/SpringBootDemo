@@ -1,0 +1,7 @@
+ECharts: 数据可视化组件库, 绘制各种数据图表
+
+官方网站：https://www.echartsjs.com/zh/index.html
+案例页面：https://www.echartsjs.com/examples/zh/index.html
+
+使用：通过 <script> 标签引入ECharts的组件 JS
+

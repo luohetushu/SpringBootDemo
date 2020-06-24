@@ -1,0 +1,36 @@
+Spring Boot 让 Spring 应用变的更轻量化
+优点：为所有 Spring 开发者更快的入门
+     开箱即用，提供各种默认配置来简化项目配置
+     内嵌式容器简化 Web 项目
+     没有冗余代码生成和 XML 配置的要求
+
+工程结构：
+com
+  +- example
+    +- myproject   // root package：com.example.myproject，所有的类和其他package都在root package之下
+      +- Application.java  // 应用主类，该类直接位于root package下。通常会在应用主类中做一些框架配置扫描等配置
+      |
+      +- domain  // domain包：用于定义实体映射关系与数据访问相关的接口和实现
+      |  +- Customer.java
+      |  +- CustomerRepository.java
+      |
+      +- service  // service包：用于编写业务逻辑相关的接口与实现
+      |  +- CustomerService.java
+      |
+      +- web  // 用于编写Web层相关的实现，比如：Spring MVC的Controller等
+      |  +- CustomerController.java
+      |
+
+
+静态资源:
+  /src/main/resource/static/ 一般用于存放静态资源(css,js,image等)
+  /src/main/resource/public/ 一般用于存放页面
+  /src/main/resource/templates/ 用于存放页面，一般是thymeleaf、FreeMaker、Velocity、JSP等
+  /src/main/resource/META-INF/resources/
+
+
+
+
+
+
+

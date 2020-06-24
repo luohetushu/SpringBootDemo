@@ -1,0 +1,70 @@
+Thymeleaf: 自动化配置模块的模板引擎
+           默认的模板配置路径为：src/main/resources/templates
+           一个 XML/XHTML/HTML5 模板引擎，可用于 Web 与 非Web 环境中的应用开发
+           使用 Thymeleaf 来完全代替 JSP 或其他模板引擎，如Velocity、FreeMarker等
+
+官方文档：https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#introducing-thymeleaf
+
+Maven 依赖：
+    <!--模版引擎模块-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+配置参数：在配置文件 application.properties 中配置
+    # Enable template caching.
+    spring.thymeleaf.cache=true
+    # Check that the templates location exists.
+    spring.thymeleaf.check-template-location=true
+    # Content-Type value.
+    spring.thymeleaf.servlet.content-type=text/html
+    # Enable MVC Thymeleaf view resolution.
+    spring.thymeleaf.enabled=true
+    # Template encoding.
+    spring.thymeleaf.encoding=UTF-8
+    # Comma-separated list of view names that should be excluded from resolution.
+    spring.thymeleaf.excluded-view-names=
+    # Template mode to be applied to templates. See also StandardTemplateModeHandlers.
+    spring.thymeleaf.mode=HTML5
+    # Prefix that gets prepended to view names when building a URL.
+    spring.thymeleaf.prefix=classpath:/templates/
+    # Suffix that gets appended to view names when building a URL.
+    spring.thymeleaf.suffix=.html
+    spring.thymeleaf.template-resolver-order= # Order of the template resolver in the chain.
+    spring.thymeleaf.view-names= # Comma-separated list of view names that can be resolved.
+
+使用：默认的模板配置路径为：src/main/resources/templates
+    1、所有html页面添加头：<html xmlns:th="http://www.thymeleaf.org">
+    2、引入 CSS 和 JS 文件：直接写static目录下的绝对路径  todo css 与 js 文件放在 src/main/resources/static 文件中
+       如：<link href="/css/xxx.css" th:href="@{/css/xxx.css}" rel="stylesheet">
+          <script src="/js/jquery-1.9.1.min.js" th:src="@{/js/jquery-1.9.1.min.js}"></script>
+    3、日前格式化：
+       后端：map.addAttribute("today", new Date());
+       前端：<span th:text="${#calendars.format(today,'yyyy-MM-dd')}">2016-08-18</span>
+         或 <span th:text="${#dates.format(today,'yyyy-MM-dd')}">2016-08-18</span>
+    4、循环
+       <tr th:each="prod : ${prods}">
+            <td th:text="${prod.name}">Onions</td>
+            <td th:text="${prod.price}">2.41</td>
+            <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+       </tr>
+    5、if 判断：<a href="comments.html" th:if="${not #lists.isEmpty(prod.comments)}">view</a>
+       unless 判断：<a href="comments.html" th:unless="${#lists.isEmpty(prod.comments)}">view</a>
+    6、switch
+       <div th:switch="${user.role}">
+       	    <p th:case="'admin'">User is an administrator</p>
+       	    <p th:case="#{roles.manager}">User is a manager</p>
+       	    <p th:case="*">User is someone else</p>
+       </div>
+
+
+
+
+
+
+
+
+
+
+

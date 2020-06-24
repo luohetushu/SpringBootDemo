@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.dao.AdminDao">
+
+    <!-- 为dao接口方法提供sql语句配置 -->
+    <!--映射器文件 namespace 与 Dao接口 全名一致：包名+类名
+        映射器文件中 aql 语句的 id 与 Dao接口中方法名一致-->
+
+    <select id="getAdminByAid" parameterType="String" resultType="Admin">
+        SELECT
+            adminId aid,
+            adminname name,
+            adminpwd password
+        FROM t_admin WHERE adminId = #{aid}
+    </select>
+
+</mapper>

@@ -1,0 +1,78 @@
+SpringMVC 单元测试：MockMvc
+MockMvc 实现对 Http 请求的模拟，用来对 Controller 进行测试
+使用方式：
+  1、MockMvcBuilders 构造 MockMvc 的构造器
+     //集成Web环境方式，指定WebApplicationContext，将会从该上下文获取相应的控制器并得到相应的MockMvc；
+     public static DefaultMockMvcBuilder webAppContextSetup(WebApplicationContext context) {
+         return new DefaultMockMvcBuilder(context);
+     }
+     //独立测试方式，通过参数指定一组控制器
+     public static StandaloneMockMvcBuilder standaloneSetup(Object... controllers) {
+         return new StandaloneMockMvcBuilder(controllers);
+     }
+  2、MockMvcRequestBuilders 创建请求 request
+    如：MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/account/info")
+              .contentType("text/html")
+              .accept(MediaType.APPLICATION_JSON);
+    常用 API：
+    public static MockHttpServletRequestBuilder get(String urlTemplate, Object... uriVars) {
+        return new MockHttpServletRequestBuilder(HttpMethod.GET, urlTemplate, uriVars);
+    }  // 根据uri模板和uri变量值得到一个 GET 请求方式，如 get(/user/{id}, 1L)；
+    public static MockHttpServletRequestBuilder post(String urlTemplate, Object... uriVars) {
+        return new MockHttpServletRequestBuilder(HttpMethod.POST, urlTemplate, uriVars);
+    }
+    public static MockHttpServletRequestBuilder put(String urlTemplate, Object... uriVars) {
+        return new MockHttpServletRequestBuilder(HttpMethod.PUT, urlTemplate, uriVars);
+    }
+    public static MockHttpServletRequestBuilder delete(String urlTemplate, Object... uriVars) {
+        return new MockHttpServletRequestBuilder(HttpMethod.DELETE, urlTemplate, uriVars);
+    }
+  3、mockMvc 调用 perform，执行一个 request 请求，调用controller的业务处理逻辑，返回ResultActions
+    // 发送请求，获取请求结果
+    ResultActions perform = mvc.perform(request);
+    接口：public interface ResultActions {
+             //添加执行完成后的断言 添加 ResultMatcher 验证规则，验证控制器执行完成后结果是否正确
+             ResultActions andExpect(ResultMatcher var1) throws Exception;
+             //添加一个结果处理器
+             ResultActions andDo(ResultHandler var1) throws Exception;
+             //表示执行完成后返回相应的结果，用于自定义验证/下一步的异步处理
+             MvcResult andReturn();
+         }
+    MockMvcResultMatchers 内置 ResultMatcher：
+       HandlerResultMatchers handler()：请求的Handler验证器，比如验证处理器类型/方法名；此处的Handler其实就是处理请求的控制器；
+       RequestResultMatchers request()：得到RequestResultMatchers验证器；
+       ModelResultMatchers model()：得到模型验证器；
+       ViewResultMatchers view()：得到视图验证器；
+       FlashAttributeResultMatchers flash()：得到Flash属性验证；
+       StatusResultMatchers status()：得到响应状态验证器；
+       HeaderResultMatchers header()：得到响应Header验证器；
+       CookieResultMatchers cookie()：得到响应Cookie验证器；
+       ContentResultMatchers content()：得到响应内容验证器；
+       JsonPathResultMatchers jsonPath(String expression, Object ... args)：得到Json表达式验证器；
+       XpathResultMatchers xpath(String expression, Object... args)：得到Xpath表达式验证器；
+       ResultMatcher forwardedUrl(final String expectedUrl)：验证处理完请求后转发的url（绝对匹配）；
+       ResultMatcher forwardedUrlPattern(final String urlPattern)：验证处理完请求后转发的url（Ant风格模式匹配，@since spring4）；
+       ResultMatcher redirectedUrl(final String expectedUrl)：验证处理完请求后重定向的url（绝对匹配）；
+       ResultMatcher redirectedUrlPattern(final String expectedUrl)：验证处理完请求后重定向的url（Ant风格模式匹配，@since spring4）；
+    返回 ResultHandler：
+       MockMvcResultHandlers.print()：输出整个响应结果信息
+       MockMvcResultHandlers.log()：
+    接口：public interface MvcResult {
+           MockHttpServletRequest getRequest();  // 得到执行的请求；
+           MockHttpServletResponse getResponse(); // 得到执行后的响应；
+           @Nullable
+           Object getHandler(); // 得到执行的处理器，一般就是控制器；
+           @Nullable
+           HandlerInterceptor[] getInterceptors(); // 得到对处理器进行拦截的拦截器；
+           @Nullable
+           ModelAndView getModelAndView();  // 得到执行后的ModelAndView；
+           @Nullable
+           Exception getResolvedException();  // 得到HandlerExceptionResolver解析后的异常；
+           FlashMap getFlashMap();  // 得到FlashMap；
+           Object getAsyncResult();  // 得到异步执行的结果；
+           Object getAsyncResult(long var1);
+       }
+
+  4、通过ResultActions, MockMvcResultMatchers对结果进行验证
+
+
